@@ -99,7 +99,7 @@ $.fn.jqCarousel = function(param){
             var oriTop = $(this).attr("oriTop");
             $(this).stop().animate({
               "top" : oriTop-totalHeight
-            },p.dura, callback.call(this));
+            },p.dura, callback.call(this, idx));
           });
         }else{
           var totalWidth = 0;
@@ -115,7 +115,7 @@ $.fn.jqCarousel = function(param){
             }else{
               $(this).stop().animate({
                 "left" : oriLeft-totalWidth
-              },p.dura, callback.call(this));
+              },p.dura, callback.call(this, idx));
             }
           });
         }
