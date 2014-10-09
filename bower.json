@@ -1,0 +1,23 @@
+{
+  "name": "jq-carousel",
+  "main": "jq-carousel.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/tommyfok/jq-carousel",
+  "authors": [
+    "tommyfok <154274174@qq.com>"
+  ],
+  "keywords": [
+    "carousel"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": [
+    "jquery": "1.11.x"
+  ]
+}
