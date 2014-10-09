@@ -48,7 +48,7 @@ $.fn.jqCarousel = function(param){
         trig : param.trigger || "mouseover",
         oncls : param.onClass || "on",
         hoverStop : param.hoverStop===true ? false : true,
-        callback: typeof(param.callback) === 'function' ? param.callback : false
+        callback: typeof(param.callback) === 'function' ? param.callback : (function () {})
       };
       
       //initialize the properties
