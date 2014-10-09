@@ -99,7 +99,7 @@ $.fn.jqCarousel = function(param){
             var oriTop = $(this).attr("oriTop");
             $(this).stop().animate({
               "top" : oriTop-totalHeight
-            },p.dura, p.callback.call(this, idx));
+            },p.dura);
           });
         }else{
           var totalWidth = 0;
@@ -115,11 +115,12 @@ $.fn.jqCarousel = function(param){
             }else{
               $(this).stop().animate({
                 "left" : oriLeft-totalWidth
-              },p.dura, p.callback.call(this, idx));
+              },p.dura);
             }
           });
         }
         elem.currentIndex = idx;
+        p.callback.call(this, idx);
       };
       elem.next = function(){
         var idx = elem.currentIndex;
