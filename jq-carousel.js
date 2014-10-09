@@ -1,32 +1,36 @@
 /**
  ** jq-carousel
  ** Author    : fsbeta(154274174@qq.com)
- ** Date    : 2013-04-03
+ ** Date      : 2013-04-03
  ** Arguments :
- ** tab     :   String(jquery css selector)
- **         when user acts on the tab, the items scroll
- ** container   :   String(jquery css selector)
- **         the box that contains the items
- ** item    :   String(jquery css selector)
- **         the item that scroll in the container
+ ** tab       : String(jquery css selector)
+ **             when user acts on the tab, the items scroll
+ ** container : String(jquery css selector)
+ **             the box that contains the items
+ ** item      : String(jquery css selector)
+ **             the item that scroll in the container
  ** interval  : Number(default 0)
- **         if it's greater than 0, the items will scroll every interval ms
- ** prev    :   String(jquery css selector)
- **         when user acts on the prev button, it scroll to the previous item
- ** next    :   String(jquery css selector)
- **         when user acts on the next button, it scroll to the next item
- ** next    :   String(jquery css selector)
- **         when user acts on the next button, it scroll to the next item
- ** direction   :   "h" || "v" || "no"
- **         "h"   : scroll horizontally(default)
- **         "v"   : scroll vertically
- **         "no"  : no scroll
- ** duration  :   Number
- **         the scroll animation duration
- ** trigger   :   String(jQuery Event String, "click"/"mouseover"/"dblclick" etc.)
- **         the event that triggers the scroll or other actions on tabs and prev/next buttons.
- ** onClass   :   String
- **         the class name that attach to the active tab.
+ **             if it's greater than 0, the items will scroll every interval ms
+ ** prev      : String(jquery css selector)
+ **             when user acts on the prev button, it scroll to the previous item
+ ** next      : String(jquery css selector)
+ **             when user acts on the next button, it scroll to the next item
+ ** next      : String(jquery css selector)
+ **             when user acts on the next button, it scroll to the next item
+ ** direction : "h" || "v" || "no"
+ **             "h"   : scroll horizontally(default)
+ **             "v"   : scroll vertically
+ **             "no"  : no scroll
+ ** duration  : Number
+ **             the scroll animation duration
+ ** trigger   : String(jQuery Event String, "click"/"mouseover"/"dblclick" etc.)
+ **             the event that triggers the scroll or other actions on tabs and prev/next buttons.
+ ** onClass   : String
+ **             the class name that attach to the active tab.
+ ** hoverStop : Boolean
+ **             Stop playing animation when mouse over if hoverStop = true
+ ** callback  : Function
+ **             Triggers when an animation end
  **/
 $.fn.jqCarousel = function(param){
     var param = param || {};
@@ -43,7 +47,8 @@ $.fn.jqCarousel = function(param){
         dura : param.duration || 500,
         trig : param.trigger || "mouseover",
         oncls : param.onClass || "on",
-        hoverStop : param.hoverStop===true ? false : true
+        hoverStop : param.hoverStop===true ? false : true,
+        callback: typeof(param.callback) === 'function' ? param.callback : false
       };
       
       //initialize the properties
@@ -94,7 +99,7 @@ $.fn.jqCarousel = function(param){
             var oriTop = $(this).attr("oriTop");
             $(this).stop().animate({
               "top" : oriTop-totalHeight
-            },p.dura);
+            },p.dura, callback.call(this));
           });
         }else{
           var totalWidth = 0;
@@ -110,7 +115,7 @@ $.fn.jqCarousel = function(param){
             }else{
               $(this).stop().animate({
                 "left" : oriLeft-totalWidth
-              },p.dura);
+              },p.dura, callback.call(this));
             }
           });
         }
@@ -140,25 +145,30 @@ $.fn.jqCarousel = function(param){
       };
       
       //Define Actions
-      for(var ii=0;ii<p.itm.length;ii++){
+      for(var ii = 0; ii < p.itm.length; ii++){
         (function(idx){
-          p.tab.eq(idx).mouseover(function(){
+          p.tab.eq(idx).mouseover(function () {
             elem.stop();
-          })[p.trig](function(){
+          })[p.trig](function () {
             elem.go(idx);
           });
         })(ii);
       }
-      p.tab.mouseout(function(){
+
+      p.tab.mouseout(function () {
         elem.play();
       });
-      // p.itm.hover(function(){
-      //   elem.stop();
-      // },function(){
-      //   elem.play();
-      // });
-      p.prev[p.trig](function(){elem.prev();});
-      p.next[p.trig](function(){elem.next();});
+
+      if (p.hoverStop === true) {
+        p.itm.hover(function () {
+          elem.stop();
+        }, function () {
+          elem.play();
+        });
+      }
+
+      p.prev[p.trig](function () { elem.prev(); });
+      p.next[p.trig](function () { elem.next(); });
 
       elem.go(0);
       elem.play();
